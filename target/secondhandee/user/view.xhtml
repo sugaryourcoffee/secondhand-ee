@@ -1,0 +1,88 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:forgeview="http://jboss.org/forge/view"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{userBean.id}"/>
+		<f:event type="preRenderView" listener="#{userBean.retrieve}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="View User"/>
+
+	<ui:define name="header">
+		User
+	</ui:define>
+
+	<ui:define name="subheader">
+		View existing User
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:panelGrid columnClasses="label,component,required" columns="3">
+			<h:outputLabel for="userBeanUserSurname" value="Surname:"/>
+			<h:outputText id="userBeanUserSurname" value="#{userBean.user.surname}"/>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserGivenName" value="Given Name:"/>
+			<h:outputText id="userBeanUserGivenName" value="#{userBean.user.givenName}"/>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserEmail" value="Email:"/>
+			<h:outputText id="userBeanUserEmail" value="#{userBean.user.email}"/>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserPhone" value="Phone:"/>
+			<h:outputText id="userBeanUserPhone" value="#{userBean.user.phone}"/>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserStreet" value="Street:"/>
+			<h:outputText id="userBeanUserStreet" value="#{userBean.user.street}"/>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserZipCode" value="Zip Code:"/>
+			<h:outputText id="userBeanUserZipCode" value="#{userBean.user.zipCode}"/>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserTown" value="Town:"/>
+			<h:outputText id="userBeanUserTown" value="#{userBean.user.town}"/>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserCountry" value="Country:"/>
+			<h:outputText id="userBeanUserCountry" value="#{userBean.user.country}"/>
+			<h:outputText/>
+			<h:outputLabel value="Admin:"/>
+			<h:outputText styleClass="#{userBean.user.admin ? 'boolean-true' : 'boolean-false'}" value=""/>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserCreatedAt" value="Created At:"/>
+			<h:outputText id="userBeanUserCreatedAt" value="#{userBean.user.createdAt}">
+				<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+			</h:outputText>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserUpdatedAt" value="Updated At:"/>
+			<h:outputText id="userBeanUserUpdatedAt" value="#{userBean.user.updatedAt}">
+				<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+			</h:outputText>
+			<h:outputText/>
+			<h:outputLabel for="userBeanUserItemLists" value="Item Lists:"/>
+			<h:dataTable id="userBeanUserItemLists" styleClass="data-table" value="#{forgeview:asList(userBean.user.itemLists)}" var="_item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Container"/>
+					</f:facet>
+					<h:link outcome="/itemList/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemContainer" value="#{_item.container}"/>
+					</h:link>
+				</h:column>
+			</h:dataTable>
+			<h:outputText/>
+		</h:panelGrid>
+
+		<div class="buttons">
+			<h:link value="View All" outcome="search" styleClass="btn btn-primary"/> 
+			<h:link value="Edit" outcome="create" includeViewParams="true" styleClass="btn btn-primary"/>
+			<h:link value="Create New" outcome="create" styleClass="btn btn-primary"/>
+		</div>
+	</ui:define>
+
+</ui:composition>

@@ -1,0 +1,232 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"
+	xmlns:forgeview="http://jboss.org/forge/view"	
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="id" value="#{eventBean.id}"/>
+		<f:event type="preRenderView" listener="#{eventBean.retrieve}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="Create Event"/>
+
+	<ui:define name="header">
+		Event
+	</ui:define>
+
+	<ui:define name="subheader">
+		<c:choose>
+			<c:when test="#{!empty eventBean.id}">
+				Edit existing Event
+			</c:when>
+			<c:otherwise>
+				Create a new Event
+			</c:otherwise>
+		</c:choose>
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:form id="create">
+			<h:messages globalOnly="true" styleClass="error"/>
+
+			<h:panelGrid columnClasses="label,component,required" columns="3">
+				<h:outputLabel for="eventBeanEventEventDate" value="Event Date:"/>
+				<h:panelGroup>
+					<h:inputText id="eventBeanEventEventDate" required="true" value="#{eventBean.event.eventDate}">
+						<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+					</h:inputText>
+					<h:message for="eventBeanEventEventDate" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText value="*"/>
+				<h:outputLabel for="eventBeanEventLocation" value="Location:"/>
+				<h:panelGroup>
+					<h:inputText id="eventBeanEventLocation" required="true" value="#{eventBean.event.location}"/>
+					<h:message for="eventBeanEventLocation" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText value="*"/>
+				<h:outputLabel for="eventBeanEventMaxLists" value="Max Lists:"/>
+				<h:panelGroup>
+					<h:inputText id="eventBeanEventMaxLists" value="#{eventBean.event.maxLists}"/>
+					<h:message for="eventBeanEventMaxLists" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="eventBeanEventMaxItemsPerList" value="Max Items Per List:"/>
+				<h:panelGroup>
+					<h:inputText id="eventBeanEventMaxItemsPerList" value="#{eventBean.event.maxItemsPerList}"/>
+					<h:message for="eventBeanEventMaxItemsPerList" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="eventBeanEventDeduction" value="Deduction:"/>
+				<h:panelGroup>
+					<h:inputText id="eventBeanEventDeduction" value="#{eventBean.event.deduction}"/>
+					<h:message for="eventBeanEventDeduction" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="eventBeanEventFee" value="Fee:"/>
+				<h:panelGroup>
+					<h:inputText id="eventBeanEventFee" value="#{eventBean.event.fee}"/>
+					<h:message for="eventBeanEventFee" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="eventBeanEventProvision" value="Provision:"/>
+				<h:panelGroup>
+					<h:inputText id="eventBeanEventProvision" value="#{eventBean.event.provision}"/>
+					<h:message for="eventBeanEventProvision" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="eventBeanEventSold" value="Sold:"/>
+				<h:panelGroup>
+					<h:selectBooleanCheckbox id="eventBeanEventSold" value="#{eventBean.event.sold}"/>
+					<h:message for="eventBeanEventSold" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="eventBeanEventCreatedAt" value="Created At:"/>
+				<h:panelGroup>
+					<h:inputText id="eventBeanEventCreatedAt" value="#{eventBean.event.createdAt}">
+						<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+					</h:inputText>
+					<h:message for="eventBeanEventCreatedAt" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="eventBeanEventUpdatedAt" value="Updated At:"/>
+				<h:panelGroup>
+					<h:inputText id="eventBeanEventUpdatedAt" value="#{eventBean.event.updatedAt}">
+						<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+					</h:inputText>
+					<h:message for="eventBeanEventUpdatedAt" styleClass="error"/>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="eventBeanEventItemLists" value="Item Lists:"/>
+				<h:panelGroup>
+					<ui:param name="_collection" value="#{eventBean.event.itemLists}"/>
+					<h:dataTable id="eventBeanEventItemLists" styleClass="data-table" value="#{forgeview:asList(_collection)}" var="_item">
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Container"/>
+							</f:facet>
+							<h:link outcome="/itemList/view">
+								<f:param name="id" value="#{_item.id}"/>
+								<h:outputText id="itemContainer" value="#{_item.container}"/>
+							</h:link>
+							<f:facet name="footer">
+								<h:inputText id="itemListBeanAddContainer" value="#{itemListBean.add.container}"/>
+								<h:message for="itemListBeanAddContainer" styleClass="error"/>
+							</f:facet>
+						</h:column>
+						<h:column footerClass="remove-column" headerClass="remove-column">
+							<h:commandLink action="#{_collection.remove(_item)}" styleClass="remove-button"/>
+							<f:facet name="footer">
+								<h:commandLink action="#{_collection.add(itemListBean.added)}" id="eventBeanEventItemListsAdd" styleClass="add-button">
+									<f:setPropertyActionListener target="#{itemListBean.add.event}" value="#{eventBean.event}"/>
+								</h:commandLink>
+							</f:facet>
+						</h:column>
+					</h:dataTable>
+				</h:panelGroup>
+				<h:outputText/>
+				<h:outputLabel for="eventBeanEventSellings" value="Sellings:"/>
+				<h:panelGroup>
+					<ui:param name="_collection" value="#{eventBean.event.sellings}"/>
+					<h:dataTable id="eventBeanEventSellings" styleClass="data-table" value="#{forgeview:asList(_collection)}" var="_item">
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Selling Number"/>
+							</f:facet>
+							<h:link outcome="/selling/view">
+								<f:param name="id" value="#{_item.id}"/>
+								<h:outputText id="itemSellingNumber" value="#{_item.sellingNumber}"/>
+							</h:link>
+							<f:facet name="footer">
+								<h:inputText id="sellingBeanAddSellingNumber" value="#{sellingBean.add.sellingNumber}"/>
+								<h:message for="sellingBeanAddSellingNumber" styleClass="error"/>
+							</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Selling Date"/>
+							</f:facet>
+							<h:link outcome="/selling/view">
+								<f:param name="id" value="#{_item.id}"/>
+								<h:outputText id="itemSellingDate" value="#{_item.sellingDate}">
+									<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+								</h:outputText>
+							</h:link>
+							<f:facet name="footer">
+								<h:inputText id="sellingBeanAddSellingDate" value="#{sellingBean.add.sellingDate}">
+									<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+								</h:inputText>
+								<h:message for="sellingBeanAddSellingDate" styleClass="error"/>
+							</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Created At"/>
+							</f:facet>
+							<h:link outcome="/selling/view">
+								<f:param name="id" value="#{_item.id}"/>
+								<h:outputText id="itemCreatedAt" value="#{_item.createdAt}">
+									<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+								</h:outputText>
+							</h:link>
+							<f:facet name="footer">
+								<h:inputText id="sellingBeanAddCreatedAt" value="#{sellingBean.add.createdAt}">
+									<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+								</h:inputText>
+								<h:message for="sellingBeanAddCreatedAt" styleClass="error"/>
+							</f:facet>
+						</h:column>
+						<h:column>
+							<f:facet name="header">
+								<h:outputText value="Updated At"/>
+							</f:facet>
+							<h:link outcome="/selling/view">
+								<f:param name="id" value="#{_item.id}"/>
+								<h:outputText id="itemUpdatedAt" value="#{_item.updatedAt}">
+									<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+								</h:outputText>
+							</h:link>
+							<f:facet name="footer">
+								<h:inputText id="sellingBeanAddUpdatedAt" value="#{sellingBean.add.updatedAt}">
+									<f:convertDateTime pattern="MMM d, yyyy hh:mm:ss a" type="both"/>
+								</h:inputText>
+								<h:message for="sellingBeanAddUpdatedAt" styleClass="error"/>
+							</f:facet>
+						</h:column>
+						<h:column footerClass="remove-column" headerClass="remove-column">
+							<h:commandLink action="#{_collection.remove(_item)}" styleClass="remove-button"/>
+							<f:facet name="footer">
+								<h:commandLink action="#{_collection.add(sellingBean.added)}" id="eventBeanEventSellingsAdd" styleClass="add-button">
+									<f:setPropertyActionListener target="#{sellingBean.add.event}" value="#{eventBean.event}"/>
+								</h:commandLink>
+							</f:facet>
+						</h:column>
+					</h:dataTable>
+				</h:panelGroup>
+				<h:outputText/>
+			</h:panelGrid>
+
+			<div class="buttons">
+				<h:commandLink value="Save" action="#{eventBean.update}" styleClass="btn btn-primary"/>
+				<c:choose>
+					<c:when test="#{!empty eventBean.id}">
+						<h:link value="Cancel" outcome="view" styleClass="btn btn-primary">
+							<f:param name="id" value="#{eventBean.id}"/>
+						</h:link>
+						<h:commandLink value="Delete" action="#{eventBean.delete}" styleClass="btn btn-primary"/>
+					</c:when>
+					<c:otherwise>
+						<h:link value="Cancel" outcome="search" styleClass="btn btn-primary"/>
+					</c:otherwise>
+				</c:choose>
+			</div>
+		</h:form>
+	</ui:define>
+
+</ui:composition>

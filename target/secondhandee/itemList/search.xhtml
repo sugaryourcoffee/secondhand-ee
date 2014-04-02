@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:forgeview="http://jboss.org/forge/view"
+	template="/resources/scaffold/pageTemplate.xhtml">
+
+	<f:metadata>
+		<f:viewParam name="page" value="#{itemListBean.page}"/>
+		<f:event type="preRenderView" listener="#{itemListBean.paginate}"/>
+	</f:metadata>
+
+	<ui:param name="pageTitle" value="Search Item List entities"/>
+
+	<ui:define name="header">
+		Item List
+	</ui:define>
+
+	<ui:define name="subheader">
+		Search Item List entities
+	</ui:define>
+
+	<ui:define name="footer"/>
+
+	<ui:define name="main">
+		<h:form id="search">
+			<f:validateBean disabled="true">
+				<h:panelGroup styleClass="search">
+
+					<h:panelGrid columnClasses="label,component,required" columns="3">
+						<h:outputLabel for="itemListBeanExampleListNumber" value="List Number:"/>
+						<h:panelGroup>
+							<h:inputText id="itemListBeanExampleListNumber" value="#{itemListBean.example.listNumber}"/>
+							<h:message for="itemListBeanExampleListNumber" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="itemListBeanExampleRemarks" value="Remarks:"/>
+						<h:panelGroup>
+							<h:inputText id="itemListBeanExampleRemarks" value="#{itemListBean.example.remarks}"/>
+							<h:message for="itemListBeanExampleRemarks" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="itemListBeanExampleContainer" value="Container:"/>
+						<h:panelGroup>
+							<h:inputText id="itemListBeanExampleContainer" value="#{itemListBean.example.container}"/>
+							<h:message for="itemListBeanExampleContainer" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="itemListBeanExampleSeller" value="Seller:"/>
+						<h:panelGroup>
+							<h:selectOneMenu converter="#{userBean.converter}" id="itemListBeanExampleSeller" value="#{itemListBean.example.seller}">
+								<f:selectItem/>
+								<f:selectItems itemLabel="#{forgeview:display(_item)}" itemValue="#{_item}" value="#{userBean.all}" var="_item"/>
+							</h:selectOneMenu>
+							<h:message for="itemListBeanExampleSeller" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+						<h:outputLabel for="itemListBeanExampleEvent" value="Event:"/>
+						<h:panelGroup>
+							<h:selectOneMenu converter="#{eventBean.converter}" id="itemListBeanExampleEvent" value="#{itemListBean.example.event}">
+								<f:selectItem/>
+								<f:selectItems itemLabel="#{forgeview:display(_item)}" itemValue="#{_item}" value="#{eventBean.all}" var="_item"/>
+							</h:selectOneMenu>
+							<h:message for="itemListBeanExampleEvent" styleClass="error"/>
+						</h:panelGroup>
+						<h:outputText/>
+					</h:panelGrid>
+					<h:panelGroup styleClass="buttons">
+						<h:commandLink value="Search" action="#{itemListBean.search}" styleClass="btn btn-primary"/>
+						<h:commandLink value="Create New" action="#{itemListBean.create}" styleClass="btn btn-primary"/>
+					</h:panelGroup>
+				</h:panelGroup>
+			</f:validateBean>
+			
+			<h:dataTable id="itemListBeanPageItems" styleClass="data-table" value="#{itemListBean.pageItems}" var="_item">
+				<h:column>
+					<f:facet name="header">
+						<h:outputText value="Container"/>
+					</f:facet>
+					<h:link outcome="/itemList/view">
+						<f:param name="id" value="#{_item.id}"/>
+						<h:outputText id="itemContainer" value="#{_item.container}"/>
+					</h:link>
+				</h:column>
+			</h:dataTable>
+			<ui:include src="/resources/scaffold/paginator.xhtml">
+				<ui:param name="paginatorBean" value="#{itemListBean}"/>
+			</ui:include>
+		</h:form>
+			
+	</ui:define>
+
+</ui:composition>
